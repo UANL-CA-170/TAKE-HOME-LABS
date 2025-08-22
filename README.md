@@ -1,0 +1,155 @@
+# A TAKE HOME LAB for low-cost control engiennering teaching
+
+## Information
+This project shows how to implement linear controllers and observers using the Arduino platform on low-cost electrical plants.  
+
+The Arduino platform was chosen because it is very common and widely available, providing an accessible environment for rapid prototyping and validation of control strategies. This allows students and researchers to design, test, and evaluate linear control algorithms in a practical and inexpensive way. 
+
+This project is released as open-source software under the GNU General Public License v3 (GPLv3), ensuring that it can be freely used, modified, and shared under the same license terms.
+
+## Table of Contents
+* [Description of the Hardware Used](#Hardware)
+* [Mathematical Model](#Modeling)
+* [Design of Controllers and Observers](#Design)
+* [Description of the Software Used](#Software)
+
+## Hardware
+The control/observation algorithm is carried out on the Arduino UNO R3 platform, electrical plants made from R, C or L elements are considered. All components can either be assembled on a breadboard or a custom shield can be fabricated using the PCB designs provided in this repository /src/PCB/. The estimated total cost of the hardware is approximately **$25–35 USD**, depending on the source of components.
+
+A description of the hardware used is shown in the following figure.
+
+The basic design consists of three main elements: the control unit, the user interface unit, and the plant to be controlled. Next each element is described.
+
+In addition to the plant, a potentiometer is used to generate the external reference, a pair of switches to start and stop the control algorithm, some LEDs are to display the system status, and a OLED 
+
+
+### The MCU board as a control unit
+
+The Arduino UNO R3 platform was chosen as control unit to elaborate the custom shield, however any other platform may be used. For breadboard design we recomend to use the Arduino Nano instead. The following inputs and outputs are used. The requiered pins for plan conection are highlighted with *, all the other pins are optional. 
+
+#### Analog Outputs (PWM)
+* **Pin 5.*** Control signal, denoted as U in the software and as $u_{i}(t)$ in the algorithm description.
+
+#### Analog Inputs 
+* **A0.*** Reference signal denoted as R in software.
+* **A1.*** Process signal 1 denoted as X1 in software.
+* **A2.*** Process signal 2 X2 denoted as X2 in software.
+* **A3.*** Process signal 3 X3 denoted as X3 in software.
+
+#### Digital Inputs
+* **Pin 2.*** Start input, denoted as START in the software.  
+* **Pin 3.*** Stop input, denoted as STOP in the software.  
+* **Pin 6.** Toggle input, denoted as TOG1 in the software.  
+* **Pin 7.** Toggle input, denoted as TOG2 in the software.  
+* **Pin 8.** Toggle input, denoted as TOG3 in the software.  
+
+#### Digital Outputs
+* **Pin 9.** LED indicator for system activated, denoted as LED9 in the software.  
+* **Pin 10.** LED indicator for system deactivated, denoted as LED10 in the software.
+* **Pin 11.** LED indicator for system deactivated, denoted as LED11 in the software.
+
+### I2C Led display
+* **SCL.** clock for I2C communication with on board display, denoted as SCL in the software.  
+* **Pin 9.** data for I2C communication with on board display, denoted as SDA in the software.  
+
+### Serial
+* **Pin 0.** UART RX for PC communication.  
+* **Pin 1.** UART TX for PC communication.
+
+### The plant
+
+Several plants can be used. Any SIMO plant with 1 input and 3 outputs can be connected to the board. The main shield enrgizes the plant with 5V and conects its input and 3 outputs,all the connections are made through female headers in the main shield.
+
+#### The RC-RC-RC plant
+
+The folder `/src/PCB/RC-RC-RC` contains the PCB design of an RC-RC-RC plant, consisting of three RC filter stages connected through jumpers **J1** and **J2**.  
+
+**Parts list:**
+
+- 3 resistors of 1 MΩ (R1, R2, R3)  
+- 3 capacitors of 1 μF (C1, C2, C3)  
+- 2 jumpers (J1, J2)  
+
+**Jumper configurations and system models:**
+
+The jumper configuration,
+
+#### RC-RC-RC Plant Jumper Configurations
+
+The folder `/src/PCB/RC-RC-RC` contains the PCB design of an RC-RC-RC plant, consisting of three RC filter stages connected through jumpers **J1**, **J2**, and **J3**.  
+
+#### Parts list:
+
+- 3 resistors of 1 MΩ (**R1**, **R2**, **R3**)  
+- 3 capacitors of 1 μF (**C1**, **C2**, **C3**)   
+- 3 jumpers (**J1**, **J2**, **J3**)  
+
+#### Schematic diagram:
+
+The schematic diagram for the RC-RC-RC plant is
+
+
+####  Jumper configurations
+
+Four different systems may be implemented depending on the jumper configuration (**J1**, **J2**, **J3**). **J1** and **J2** connect the RC stages, while **J3** bypasses the third capacitor **C3** to ground.
+
+#####  
+
+| J1 | J2 | J3 | System order   | Transfer function |
+|----|----|----|----------------|------------------|
+| 0  | X  | X  | First order    | G(s) = 1/(s + 1)  |
+| 1  | 0  | X  | Second order   | G(s) = 1/(s^2 + Xs + X)  |
+| 1  | 1  | 0  | Third order    | G(s) = 1/(s^3 + Xs^2 + Xs + X)  |
+| 1  | 1  | 1  | Third order    | G(s) = (Xs + X)/(s^3 + Xs^2 + Xs + X)  |
+
+####  Mathematical model
+
+Next the mathematical models for some jumper configurations are shown. 
+
+#####  Case a) First order  **J1**=0, **J2**=X, , **J3**=X
+
+The pin 10 is the input to the plant, and the output of the first RC network (pin A1) its output. All the other networks are disconnected.  
+
+In this case The transfer function from U (pin 10) to Y (pin A1) is given by:
+
+The state-space model is given by:
+
+where X1 represents the voltage at **C1**.
+
+#####  Case b) Second order  **J1**=1, **J2**=0, , **J3**=X
+
+The pin 10 is the input to the plant, and the output of the second RC network (pin A2) its output. All the other networks are disconnected.  
+
+In this case The transfer function from U (pin 10) to Y (pin A2) is given by:
+
+The state-space model is given by:
+
+```math
+\begin{eqnarray*}
+  \left[\!\!\begin{array}{l}\dot{x}_{1}(t) \\ \dot{x}_2 (t) \end{array}\!\!\right] & = &  \left[\!\!\begin{array}{cr}-\frac{1}{R_1C_1}-\frac{1}{R_2C_1} & \frac{1}{R_2C_1} \\ \frac{1}{R_2C_2} & -\frac{1}{R_2C_2}\end{array}\!\!\right]\!\!\left[\begin{array}{l}x_{1}(t) \\ x_2(t) \end{array}\!\!\right]\!\!+\!\!\left[\!\!\begin{array}{c}\frac{1}{R_1C_1} \\ 0 \end{array}\right]u_i(t), \\ 
+  y(t) & = & \left[\begin{array}{cc}0 & 1\end{array}\right]\left[\begin{array}{c}x_{1}(t) \\ x_2(t) \end{array}\right],
+\end{eqnarray*}
+```
+
+where X1 represents the voltage at **C1** and X2 represents the voltage at **C2**.
+
+#####  Case c) Third order  **J1**=1, **J2**=1, , **J3**=0
+
+The pin 10 is the input to the plant, and the output of the third RC network (pin A3) its output. All the other networks are disconnected.  
+
+In this case The transfer function from U (pin 10) to Y (pin A3) is given by:
+
+The state-space model is given by:
+
+where X1 represents the voltage at **C1**, X2 represents the voltage at **C2**, and X3 represents the voltage at **C3**.
+
+#####  Case d) Third order, second case  **J1**=1, **J2**=1, , **J3**=1
+
+The pin 10 is the input to the plant, and the output of the third RC network (pin A3) its output. All the other networks are disconnected.  
+
+In this case The transfer function from U (pin 10) to Y (pin A3) is given by:
+
+The state-space model is given by:
+
+where X1 represents the voltage at **C1**, X2 represents the voltage at **C2**, and X3 represents the voltage at **C3**.
+
