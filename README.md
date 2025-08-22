@@ -64,20 +64,6 @@ Several plants can be used. Any SIMO plant with 1 input and 3 outputs can be con
 
 The folder `/src/PCB/RC-RC-RC` contains the PCB design of an RC-RC-RC plant, consisting of three RC filter stages connected through jumpers **J1** and **J2**.  
 
-**Parts list:**
-
-- 3 resistors of 1 MΩ (R1, R2, R3)  
-- 3 capacitors of 1 μF (C1, C2, C3)  
-- 2 jumpers (J1, J2)  
-
-**Jumper configurations and system models:**
-
-The jumper configuration,
-
-#### RC-RC-RC Plant Jumper Configurations
-
-The folder `/src/PCB/RC-RC-RC` contains the PCB design of an RC-RC-RC plant, consisting of three RC filter stages connected through jumpers **J1**, **J2**, and **J3**.  
-
 #### Parts list:
 
 - 3 resistors of 1 MΩ (**R1**, **R2**, **R3**)  
@@ -95,12 +81,12 @@ Four different systems may be implemented depending on the jumper configuration 
 
 #####  
 
-| J1 | J2 | J3 | System order   | Transfer function |
-|----|----|----|----------------|------------------|
-| 0  | X  | X  | First order    | G(s) = 1/(s + 1)  |
-| 1  | 0  | X  | Second order   | G(s) = 1/(s^2 + Xs + X)  |
-| 1  | 1  | 0  | Third order    | G(s) = 1/(s^3 + Xs^2 + Xs + X)  |
-| 1  | 1  | 1  | Third order    | G(s) = (Xs + X)/(s^3 + Xs^2 + Xs + X)  |
+| Case | J1 | J2 | J3 | System order   | Transfer function |
+|------|----|----|----|----------------|------------------|
+| a) | 0  | X  | X  | First order    | G(s) = 1/(s + 1)  |
+| b) | 1  | 0  | X  | Second order   | G(s) = 1/(s^2 + 3s + 1)  |
+| c) | 1  | 1  | 0  | Third order    | G(s) = 1/(s^3 + 5s^2 + 6s + X)  |
+| d) | 1  | 1  | 1  | Second order   | G(s) = 1/(s^2 + 4s + 3)  |
 
 ####  Mathematical model
 
@@ -111,7 +97,11 @@ Next the mathematical models for some jumper configurations are shown.
 The pin 10 is the input to the plant, and the output of the first RC network (pin A1) its output. All the other networks are disconnected.  
 
 In this case The transfer function from U (pin 10) to Y (pin A1) is given by:
-
+```math
+\begin{equation*}
+  G(s) = \frac{\frac{1}{R_1 C_1}}{\Biggl( s + \left( \frac{1}{R_1 C_1} + \frac{1}{R_2 C_1} + \frac{1}{R_2 C_2} \right) s + \frac{1}{R_1 R_2 C_1 C_2} \Biggr)}
+\end{equation*},
+```
 The state-space model is given by:
 
 where X1 represents the voltage at **C1**.
@@ -121,9 +111,12 @@ where X1 represents the voltage at **C1**.
 The pin 10 is the input to the plant, and the output of the second RC network (pin A2) its output. All the other networks are disconnected.  
 
 In this case The transfer function from U (pin 10) to Y (pin A2) is given by:
-
-The state-space model is given by:
-
+```math
+\begin{equation*}
+  G(s) = \frac{\frac{1}{R_1 R_2 C_1 C_2}}{\Biggl( s^2 + \left( \frac{1}{R_1 C_1} + \frac{1}{R_2 C_1} + \frac{1}{R_2 C_2} \right) s + \frac{1}{R_1 R_2 C_1 C_2} \Biggr)}
+\end{equation*},
+```
+and the state-space model is given by:
 ```math
 \begin{eqnarray*}
   \left[\!\!\begin{array}{l}\dot{x}_{1}(t) \\ \dot{x}_2 (t) \end{array}\!\!\right] & = &  \left[\!\!\begin{array}{cr}-\frac{1}{R_1C_1}-\frac{1}{R_2C_1} & \frac{1}{R_2C_1} \\ \frac{1}{R_2C_2} & -\frac{1}{R_2C_2}\end{array}\!\!\right]\!\!\left[\begin{array}{l}x_{1}(t) \\ x_2(t) \end{array}\!\!\right]\!\!+\!\!\left[\!\!\begin{array}{c}\frac{1}{R_1C_1} \\ 0 \end{array}\right]u_i(t), \\ 
