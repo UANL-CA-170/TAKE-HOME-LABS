@@ -18,10 +18,7 @@ The control/observation algorithm is carried out on the Arduino UNO R3 platform,
 
 A description of the hardware used is shown in the following figure.
 
-The basic design consists of three main elements: the control unit, the user interface unit, and the plant to be controlled. Next each element is described.
-
-In addition to the plant, a potentiometer is used to generate the external reference, a pair of switches to start and stop the control algorithm, some LEDs are to display the system status, and a OLED 
-
+The basic design consists of three main elements: the control unit, the user interface unit, and the plant to be controlled. Next each element is described. 
 
 ### The MCU board as a control unit
 
