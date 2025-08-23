@@ -11,7 +11,7 @@ Special thanks to all the members of the Departamento de Control from FIME-UANL.
 
 ## Table of Contents
 * [Description of the Hardware Used](#Hardware)
-* [Mathematical Model](#Modeling)
+* [Mathematical Model](#Mathematical)
 * [Design of Controllers and Observers](#Design)
 * [Description of the Software Used](#Software)
 
@@ -89,11 +89,11 @@ Four different systems may be implemented depending on the jumper configuration 
 | c) | 1  | 1  | 0  | Third order    | G(s) = 1 / (s^3 + 5s^2 + 6s + X)  | G(s) = X3(s) / U(s) |
 | d) | 1  | 1  | 1  | Second order   | G(s) = 1 / (s^2 + 4s + 3)  | G(s) = X2(s) / U(s) |
 
-####  Mathematical model
+##  Mathematical model
 
 Next the mathematical models for some jumper configurations are shown. 
 
-#####  Case a) First order  **J1**=0, **J2**=X, , **J3**=X
+###  Case a) First order  **J1**=0, **J2**=X, , **J3**=X
 
 The pin 10 is the input to the plant, and the output of the first RC network (pin A1) its output. All the other networks are disconnected.  
 
@@ -112,7 +112,7 @@ The state-space model is given by:
 ```
 where X1 represents the voltage at **C1**.
 
-#####  Case b) Second order  **J1**=1, **J2**=0, , **J3**=X
+###  Case b) Second order  **J1**=1, **J2**=0, , **J3**=X
 
 The pin 10 is the input to the plant, and the output of the second RC network (pin A2) its output. All the other networks are disconnected.  
 
@@ -132,7 +132,7 @@ and the state-space model is given by:
 
 where X1 represents the voltage at **C1** and X2 represents the voltage at **C2**.
 
-#####  Case c) Third order  **J1**=1, **J2**=1, , **J3**=0
+###  Case c) Third order  **J1**=1, **J2**=1, , **J3**=0
 
 The pin 10 is the input to the plant, and the output of the third RC network (pin A3) its output. All the other networks are disconnected.  
 
@@ -142,7 +142,7 @@ The state-space model is given by:
 
 where X1 represents the voltage at **C1**, X2 represents the voltage at **C2**, and X3 represents the voltage at **C3**.
 
-#####  Case d) Third order, second case  **J1**=1, **J2**=1, , **J3**=1
+###  Case d) Third order, second case  **J1**=1, **J2**=1, , **J3**=1
 
 The pin 10 is the input to the plant, and the output of the third RC network (pin A3) its output. All the other networks are disconnected.  
 
@@ -151,4 +151,58 @@ In this case The transfer function from U (pin 10) to Y (pin A3) is given by:
 The state-space model is given by:
 
 where X1 represents the voltage at **C1**, X2 represents the voltage at **C2**, and X3 represents the voltage at **C3**.
+
+## Software
+
+#### Main Routine
+The `loop()` routine runs cyclically and serves as the main routine. It performs input processing, state estimation, system control, output processing, PC communications, and uniform sampling control. The `observador()` and `control()` functions implement the algorithms described in the **Design** section, while the rest of the functions handle IO, serial communication, and uniform sampling control.  
+```cpp
+// ******************************************************** //
+//---------- Rutinia principal  --------//                  //
+// ******************************************************** //
+void loop() {                     
+  proc_entradas();                    // Procesamiento de Entradas
+  observador();                       // Observador
+  control();                          // Control
+  proc_salidas();                     // Procesado de Salidas
+  coms_arduino_ide();                 // Comunicaciones
+  //coms_python(&Rw,&Y,&U);
+  espera();			      // Muestreo uniforme
+}
+```
+
+
+Control Routines
+
+This routine implements the state feedback described in the Design/Coordinate Transformation Solution section. It uses the states estimated by the observer, and the term Kp*R to track the reference.
+```cpp
+void control(){
+  // Control
+  U = Kp*R - K1*XeR1 - K2*XeR2 - K3*XeR3;       // Ley de control retro estado estimado
+   
+  // Saturation to [0, 5]
+  if(U >= 5.0) U = 5.0;               // Saturacion de control en rango 0 a 5V                      
+  else if(U < 0) U = 0;
+}
+```
+
+Observer Routines
+
+A Luenberger observer is implemented as described in Design/Luenberger Observer. Euler’s method is used to implement the integrators. The dynamics to integrate are expressed in the functions f1 and f2. The model matrices A, B, C and gains H1, H2 were calculated in the setup routine `setup()`.
+```cpp
+void observador(){
+  // Obs dynamic
+  float f1 = Am11*XeR1 + Am12*XeR2 + Am13*XeR3 + Bm1*U + H1*(Y-XeR3);     
+  float f2 = Am21*XeR1 + Am22*XeR2 + Am23*XeR3 + Bm2*U + H2*(Y-XeR3);
+  float f3 = Am21*XeR1 + Am22*XeR2 + Am33*XeR3 + Bm3*U + H2*(Y-XeR3);     
+
+  // Euler
+  float XeN1 = XeR1 + Tseg*f1;              
+  float XeN2 = XeR2 + Tseg*f2;              
+  float XeN3 = XeR2 + Tseg*f3;              
+  XeR1 = XeN1;
+  XeR2 = XeN2;
+  XeR3 = XeN3;
+}
+```
 
