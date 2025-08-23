@@ -7,6 +7,8 @@ The Arduino platform was chosen because it is very common and widely available, 
 
 This project is released as open-source software under the GNU General Public License v3 (GPLv3), ensuring that it can be freely used, modified, and shared under the same license terms.
 
+Special thanks to G. Cedillo-Garza, E. Alcora-Garzia, D. Diaz-Romero, E. Zambrano-Serrano, M. Platas-Garza, 
+
 ## Table of Contents
 * [Description of the Hardware Used](#Hardware)
 * [Mathematical Model](#Modeling)
@@ -96,11 +98,16 @@ The pin 10 is the input to the plant, and the output of the first RC network (pi
 In this case The transfer function from U (pin 10) to Y (pin A1) is given by:
 ```math
 \begin{equation*}
-  G(s) = \frac{\frac{1}{R_1 C_1}}{\Biggl( s + \left( \frac{1}{R_1 C_1} + \frac{1}{R_2 C_1} + \frac{1}{R_2 C_2} \right) s + \frac{1}{R_1 R_2 C_1 C_2} \Biggr)}
+  G(s) = \frac{1}{R_1C_1 s + 1} 
 \end{equation*},
 ```
 The state-space model is given by:
-
+```math
+\begin{eqnarray*}
+  \dot{x}_1 (t)  & = &  -\frac{1}{R_1C_1}x_1(t) +  \frac{1}{R_1C_1}u(t),  \\ 
+  y(t) & = & x_1(t),
+\end{eqnarray*}
+```
 where X1 represents the voltage at **C1**.
 
 #####  Case b) Second order  **J1**=1, **J2**=0, , **J3**=X
