@@ -142,7 +142,7 @@ The state-space model is given by:
 
 where X1 represents the voltage at **C1**, X2 represents the voltage at **C2**, and X3 represents the voltage at **C3**.
 
-###  Case d) Third order, second case  **J1**=1, **J2**=1, , **J3**=1
+###  Case d) Second order, second case  **J1**=1, **J2**=1, , **J3**=1
 
 The pin 10 is the input to the plant, and the output of the third RC network (pin A3) its output. All the other networks are disconnected.  
 
