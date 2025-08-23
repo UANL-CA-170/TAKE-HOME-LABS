@@ -72,7 +72,9 @@ The folder `/src/PCB/RC-RC-RC` contains the PCB design of an RC-RC-RC plant, con
 #### Schematic diagram:
 
 The schematic diagram for the RC-RC-RC plant is
+![Schematic diagram](./images/RCRCRCcircuit.png)
 
+In the schematic, U represents the pin 10 as the plant control input; while X1, X2 amd X3 represent process variables which are meassured through pins A1, A2 and A3 respectively.
 
 ####  Jumper configurations
 
@@ -80,12 +82,12 @@ Four different systems may be implemented depending on the jumper configuration 
 
 #####  
 
-| Case | J1 | J2 | J3 | System order   | Transfer function |
-|------|----|----|----|----------------|------------------|
-| a) | 0  | X  | X  | First order    | G(s) = 1/(s + 1)  |
-| b) | 1  | 0  | X  | Second order   | G(s) = 1/(s^2 + 3s + 1)  |
-| c) | 1  | 1  | 0  | Third order    | G(s) = 1/(s^3 + 5s^2 + 6s + X)  |
-| d) | 1  | 1  | 1  | Second order   | G(s) = 1/(s^2 + 4s + 3)  |
+| Case | J1 | J2 | J3 | System order   | Transfer function | Relation Output/Input for G(s) | 
+|------|----|----|----|----------------|------------------|-------------|
+| a) | 0  | X  | X  | First order    | G(s) = 1 / (s + 1)  | G(s) = X1(s) / U(s) |
+| b) | 1  | 0  | X  | Second order   | G(s) = 1 / (s^2 + 3s + 1)  | G(s) = X2(s) / U(s) |
+| c) | 1  | 1  | 0  | Third order    | G(s) = 1 / (s^3 + 5s^2 + 6s + X)  | G(s) = X3(s) / U(s) |
+| d) | 1  | 1  | 1  | Second order   | G(s) = 1 / (s^2 + 4s + 3)  | G(s) = X2(s) / U(s) |
 
 ####  Mathematical model
 
