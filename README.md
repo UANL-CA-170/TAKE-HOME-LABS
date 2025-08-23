@@ -7,7 +7,7 @@ The Arduino platform was chosen because it is very common and widely available, 
 
 This project is released as open-source software under the GNU General Public License v3 (GPLv3), ensuring that it can be freely used, modified, and shared under the same license terms.
 
-Special thanks to all the members of the Departamento de Control from FIME-UANL.  
+Special thanks to all the members of the Departamento de Control, FIME-UANL.  
 
 ## Table of Contents
 * [Description of the Hardware Used](#Hardware)
