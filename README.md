@@ -166,9 +166,26 @@ where X1 represents the voltage at **C1**, X2 represents the voltage at **C2**, 
 The pin 10 is the input to the plant, and the output of the third RC network (pin A3) its output. All the other networks are disconnected.  
 
 In this case The transfer function from U (pin 10) to Y (pin A3) is given by:
+```math
+\begin{equation*}
+G(s) = \frac{Y(s)}{U(s)} = \frac{\frac{1}{R_1 C_1}}{s^2 + a_1 s + a_0},
+\end{equation*}
+```
+with 
+```math
+\begin{aligned}
+a_1 &= \frac{1}{R_1C_1} + \frac{1}{R_2C_1} + \frac{1}{R_2C_2} + \frac{1}{R_3C_2},\\[0.5em]
+a_0 &= \frac{1}{R_1C_1}\frac{1}{R_2C_2} + \frac{1}{R_1C_1}\frac{1}{R_3C_2} + \frac{1}{R_2C_1}\frac{1}{R_3C_2}.
+\end{aligned}
+```
 
 The state-space model is given by:
-
+```math
+\begin{eqnarray*}
+  \left[\!\!\begin{array}{l}\dot{x}_{1}(t) \\ \dot{x}_2 (t) \end{array}\!\!\right] & = &  \left[\!\!\begin{array}{cr}-\frac{1}{R_1C_1}-\frac{1}{R_2C_1} & \frac{1}{R_2C_1} \\ \frac{1}{R_2C_2} & -\frac{1}{R_2C_2} -\frac{1}{R_3C_2} \end{array}\!\!\right]\!\!\left[\begin{array}{l}x_{1}(t) \\ x_2(t) \end{array}\!\!\right]\!\!+\!\!\left[\!\!\begin{array}{c}\frac{1}{R_1C_1} \\ 0 \end{array}\right]u_i(t), \\ 
+  y(t) & = & \left[\begin{array}{cc}0 & 1\end{array}\right]\left[\begin{array}{c}x_{1}(t) \\ x_2(t) \end{array}\right],
+\end{eqnarray*}
+```
 where X1 represents the voltage at **C1**, X2 represents the voltage at **C2**, and X3 represents the voltage at **C3**.
 
 ## Software
