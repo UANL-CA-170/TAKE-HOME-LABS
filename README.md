@@ -139,7 +139,12 @@ The pin 10 is the input to the plant, and the output of the third RC network (pi
 In this case The transfer function from U (pin 10) to Y (pin A3) is given by:
 
 The state-space model is given by:
-
+\begin{eqnarray*}
+  \left[\!\!\begin{array}{l}\dot{x}_{1}(t) \\ \dot{x}_2 (t) \\ \dot{x}_3 (t) \end{array}\!\!\right] & = &  
+  \left[\!\!\begin{array}{ccc}-\frac{1}{R_1C_1}-\frac{1}{R_2C_1} & \frac{1}{R_2C_1} & 0 \\ \frac{1}{R_2C_2} & -\frac{1}{R_2C_2}-\frac{1}{R_3 C_2} & \frac{1}{R_3C_3} \\ 0 & \frac{1}{R_3C_3} & -\frac{1}{R_3C_3} \end{array}\!\!\right]\!\!\left[\begin{array}{l}x_{1}(t) \\ x_2(t) \\ x_3(t) \end{array}\!\!\right]\!\!+\!\!\left[\!\!\begin{array}{c}\frac{1}{R_1C_1} \\ 0 \\ 0 \end{array}\right]u(t), \\ 
+  y(t) & = & \left[\begin{array}{ccc}0 & 0 & 1\end{array}\right]\left[\begin{array}{c}x_{1}(t) \\ x_2(t) \\ x_3(t) \end{array}\right],
+\end{eqnarray*}
+```
 where X1 represents the voltage at **C1**, X2 represents the voltage at **C2**, and X3 represents the voltage at **C3**.
 
 ###  Case d) Second order, second case  **J1**=1, **J2**=1, , **J3**=1
