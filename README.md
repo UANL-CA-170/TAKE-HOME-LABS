@@ -97,7 +97,7 @@ Next the mathematical models for some jumper configurations are shown.
 
 The pin 10 is the input to the plant, and the output of the first RC network (pin A1) its output. All the other networks are disconnected.  
 
-In this case The transfer function from U (pin 10) to Y (pin A1) is given by:
+In this case, the transfer function from U (pin 10) to Y (pin A1) is given by:
 ```math
 \begin{equation*}
   G(s) = \frac{1}{R_1C_1 s + 1} 
@@ -116,7 +116,7 @@ where X1 represents the voltage at **C1**.
 
 The pin 10 is the input to the plant, and the output of the second RC network (pin A2) its output. All the other networks are disconnected.  
 
-In this case The transfer function from U (pin 10) to Y (pin A2) is given by:
+In this case, the transfer function from U (pin 10) to Y (pin A2) is given by:
 ```math
 \begin{equation*}
   G(s) = \frac{\frac{1}{R_1 R_2 C_1 C_2}}{\Biggl( s^2 + \left( \frac{1}{R_1 C_1} + \frac{1}{R_2 C_1} + \frac{1}{R_2 C_2} \right) s + \frac{1}{R_1 R_2 C_1 C_2} \Biggr)}
@@ -136,7 +136,7 @@ where X1 represents the voltage at **C1** and X2 represents the voltage at **C2*
 
 The pin 10 is the input to the plant, and the output of the third RC network (pin A3) its output. All the other networks are disconnected.  
 
-In this case The transfer function from U (pin 10) to Y (pin A3) is given by:
+In this case, the transfer function from U (pin 10) to Y (pin A3) is given by:
 ```math
 \begin{equation*}
 G(s) = \frac{Y(s)}{U(s)} = \frac{\frac{1}{R_1 C_1 R_2 C_2 R_3 C_3}}{s^3 + a_2 s^2 + a_1 s + a_0},
