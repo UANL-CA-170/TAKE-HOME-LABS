@@ -137,6 +137,19 @@ where X1 represents the voltage at **C1** and X2 represents the voltage at **C2*
 The pin 10 is the input to the plant, and the output of the third RC network (pin A3) its output. All the other networks are disconnected.  
 
 In this case The transfer function from U (pin 10) to Y (pin A3) is given by:
+```math
+\begin{equation*}
+G(s) = \frac{Y(s)}{U(s)} = \frac{\frac{1}{R_1 C_1 R_2 C_2 R_3 C_3}}{s^3 + a_2 s^2 + a_1 s + a_0},
+\end{equation*}
+```
+with parameters
+```math
+\begin{aligned}
+a_2 &= \frac{1}{R_1 C_1} + \frac{1}{R_2 C_1} + \frac{1}{R_2 C_2} + \frac{1}{R_3 C_2} + \frac{1}{R_3 C_3},\\[1em]
+a_1 &= \frac{1}{R_1 C_1}\frac{1}{R_2 C_2} + \frac{1}{R_1 C_1}\frac{1}{R_3 C_3} + \frac{1}{R_2 C_1}\frac{1}{R_2 C_2} + \frac{1}{R_2 C_1}\frac{1}{R_3 C_2} + \frac{1}{R_2 C_2}\frac{1}{R_3 C_2} + \frac{1}{R_2 C_2}\frac{1}{R_3 C_3},\\[0.5em]
+a_0 &= \frac{1}{R_1 C_1}\frac{1}{R_2 C_2}\frac{1}{R_3 C_3}.
+\end{aligned}
+```
 
 The state-space model is given by:
 ```math
