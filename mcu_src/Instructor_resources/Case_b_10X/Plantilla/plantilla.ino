@@ -3,22 +3,40 @@
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
+/*
+ * ============================================================
+ *  Control-Observador-RC-RC
+ *  ------------------------------------------------------------
+ *  Control por asignación de polos para un sistema RC-RC
+ *  con observador de estado e interfaz OLED.
+ *
+ *  Autor: MAPG, EAG
+ *  Fecha: Noviembre 13, 2022
+ *
+ *  Descripción:
+ *  Implementación de un sistema de control digital y observador
+ *  de estado para una planta RC-RC, con visualización en OLED
+ *  y selección de modos de operación mediante interruptores.
+ *
+ *  Licencia:
+ *  Este programa es software libre: puede redistribuirlo y/o 
+ *  modificarlo bajo los términos de la GNU General Public License 
+ *  publicada por la Free Software Foundation, ya sea la versión 3 
+ *  de la Licencia, o (a su elección) cualquier versión posterior.
+ * ============================================================
+ */
 
+// ******************************************************** //
+//---------- INICIO DEL PROGRAMA --------//                    
+// ******************************************************** //
+
+// ******************************************************** //
+//---------- Librerias a usar --------//                    
+// ******************************************************** //
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <SoftwareSerial.h>
-
-// Control-Observador-RC-RC
-
-// ******************************************************** //
-//                                                          //
-// Control por asignación de polos para circuito RC-RC      //
-//                                                          //
-// Noviembre 13 del 2022, MAPG, EAG                         //
-//                                                          //
-// ******************************************************** //
-
 
 // ******************************************************** //
 //---------- Polos de control --------//                    
@@ -27,12 +45,10 @@
 #define a1i -1.7320508                 
 #define a2r -1                         
 #define a2i 1.7320508                 
-// ******************************************************** //
-// Para integrador
+// En el caso de control integral se ocupa polo extra
 #define a3r -1                                              //
 #define a3i 0                                               //
 // ******************************************************** //
-
 
 // ******************************************************** //
 //---------- Polos de observador   --------//               
@@ -60,13 +76,15 @@ float Tseg = 0.1;          // Muestreo en Tseg segundos
 // ******************************************************** //
 
 // ******************************************************** //
-//----------  Pines y escalas  --------//                    
+//----------  Pines   --------//                    
 // ******************************************************** //
+// Interacción con planta
 #define pR 0                
 #define pX1 1               
 #define pX2 2                     
 #define pU 5       
 
+// Interacción con usuario
 #define pLEDON 11             
 #define pLEDOFF 9              
 #define pSW2 2              
@@ -75,11 +93,17 @@ float Tseg = 0.1;          // Muestreo en Tseg segundos
 #define pCtrl 4  
 #define pObs 7   
 
+// ******************************************************** //
+//----------  Escalamientos  --------//                    
+// ******************************************************** //
 #define mX 0.004882813      
 #define bX 0                
 #define mU 51               
 #define bU 0                
 
+// ******************************************************** //
+//----------  Configuración OLED  --------//                    
+// ******************************************************** //
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 #define OLED_RESET    -1
